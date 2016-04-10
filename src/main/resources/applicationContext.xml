@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+       default-autowire="byName">
+
+    <!--<context:annotation-config/>-->
+
+    <!--XML과 빈 스캐닝을 함께 사용하는 경우 XML을 사용하는 컨텍스트를 기본으로 하고, 다음과 같이 빈스캐너 태그를 등록해준다 -->
+    <context:component-scan base-package="sample"/>
+
+    <bean id="hello" class="pojo.Hello">
+        <constructor-arg index="0" value="Spring1"/>
+        <constructor-arg index="1" ref="printer"/>
+        <!--수정자를 이용한 의존성 주입-->
+        <property name="printer">
+            <!--내부빈으로 프로퍼티 등록-->
+            <bean class="pojo.StringPrinter"/>
+        </property>
+        <property name="name" value="Spring"/>
+    </bean>
+
+    <!--bean 을 이용한 SimpleDriverDataSource-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost/testdb"/>
+        <property name="username" value="spring"/>
+        <property name="password" value="book"/>
+    </bean>
+
+    <!--생성자를 이용한 의존성 주입-->
+    <bean id="hello2" class="pojo.Hello">
+        <constructor-arg index="0" value="Spring"/>
+        <constructor-arg index="1" ref="printer"/>
+    </bean>
+
+    <bean id="printer" class="pojo.StringPrinter"/>
+
+    <!--Autowiring by name-->
+    <bean id="hello3" class="pojo.Hello" autowire="byName">
+        <property name="name" value="Spring"/>
+    </bean>
+
+    <!--타입으로 자동 와이어링 하는 경우 같은 타입의 빈이 2개 이상 있으면 적용되지 못한다-->
+    <bean id="hello4" class="pojo.Hello" autowire="byType">
+        <property name="name" value="spspsp"/>
+    </bean>
+</beans>
