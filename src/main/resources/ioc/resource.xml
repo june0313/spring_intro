@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--<context:annotation-config/>-->
+
+    <!--XML 안에서 빈스캐닝을 사용하는 경우, 아래 태그만 사용해줘도 된다.-->
+    <!--빈 스캐닝은 항상 어노테이션 의존 관계 설정을 지원한다고 기억하면 된다.-->
+    <!--대신 빈 스캐닝을 위해 빈 클래스에 @Component를 붙혀주어야 한다.-->
+    <context:component-scan base-package="java"/>
+
+    <!--프로퍼티 파일의 위치를 지정하는 태그-->
+    <!--PropertyPlaceHolderConfigurer 빈이 자동으로 등록된다 (빈 팩토리 후처리기)-->
+    <context:property-placeholder location="database.properties"/>
+
+    <bean id="hello5" class="pojo.Hello">
+        <property name="name" value="Spring"/>
+    </bean>
+
+    <bean id="printer2" class="pojo.StringPrinter"/>
+
+    <bean id="mysqlDataSource" class="com.mysql.jdbc.jdbc2.optional.MysqlDataSource">
+        <qualifier value="mainDB"/>
+    </bean>
+    <bean id="simpleDriverDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource"/>
+
+    <bean id="dataSource2" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driverClass" value="${db.driverclass}"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+    </bean>
+</beans>
